@@ -68,9 +68,8 @@ data = [
 ]
 df = pd.DataFrame(data)
 
-
 # Create visualization
-plt.figure(figsize=(18, 12))  # Increased figure size
+plt.figure(figsize=(20, 14))  # Increased figure size
 plt.style.use("default")
 
 # Set up the bar plot
@@ -91,26 +90,28 @@ for mode_key, mode_label in modes.items():
     ]
     offset = width * multiplier
     rects = plt.bar(
-        x + offset, runtimes, width, label=mode_label, color=colors[multiplier]
+        x + offset,
+        runtimes,
+        width,
+        label=mode_label,
+        color=colors[multiplier],
+        edgecolor="black",
+        linewidth=1,
     )
-    plt.bar_label(rects, padding=3, rotation=90, fontsize=10)  # Increased font size
     multiplier += 1
 
 # Customize the plot
-plt.xlabel("Key Encapsulation Mechanism (KEM)", fontsize=14, fontweight="bold")
-plt.ylabel("Average Runtime (ms)", fontsize=14, fontweight="bold")
-plt.title(
-    "RSA Performance with Various KEMs and Network Conditions",
-    fontsize=18,
-    fontweight="bold",
-)
-plt.xticks(
-    x + width * 1.5, kem_labels, rotation=45, ha="right", fontsize=12
-)  # Increased font size
-plt.yticks(fontsize=12)  # Increased font size
+plt.xlabel("Key Encapsulation Mechanism (KEM)", fontsize=24, fontweight="bold")
+plt.ylabel("Average Runtime (ms)", fontsize=24, fontweight="bold")
+plt.xticks(x + width * 1.5, kem_labels, rotation=45, ha="right", fontsize=20)
+plt.yticks(fontsize=20)
 
-# Increase legend font size
-plt.legend(title="Network Condition", title_fontsize=14, fontsize=16, loc="upper left")
+# Increase legend font size and move it outside the plot
+plt.legend(
+    title="Network Condition",
+    title_fontsize=28,
+    fontsize=24,
+)
 
 plt.grid(True, axis="y", linestyle="--", alpha=0.7)
 plt.tight_layout()

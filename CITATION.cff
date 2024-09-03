@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Mutlugun"
+  given-names: "Ahmet"
+  orcid: "https://orcid.org/0009-0003-4151-0306"
+title: "PQ-IPsec"
+version: 1.0.0
+date-released: 2024-9-3
+url: "https://github.com/adwise-fiu/PQ-IPsec"

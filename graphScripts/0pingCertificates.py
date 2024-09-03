@@ -69,80 +69,59 @@ data = [
 ]
 df = pd.DataFrame(data)
 
-# Create x25519 visualization
+# Create visualization
+plt.figure(figsize=(20, 14))  # Increased figure size
 plt.style.use("default")
-fig, ax = plt.subplots(figsize=(15, 10))
-width = 0.15
+
+# Set up the bar plot
 x = np.arange(len(certificates))
+width = 0.2
+multiplier = 0
 
 # Define a vibrant color palette
 colors = ["#58508d", "#bc5090", "#ff6361", "#ffa600"]
 
-kem = "x25519"
-kem_data = df[df["KEM"] == kem]
-
-for i, (mode_key, mode_label) in enumerate(modes.items()):
+# Plot bars for each network condition
+for mode_key, mode_label in modes.items():
     runtimes = [
-        kem_data[
-            (kem_data["Certificate"] == cert)
-            & (kem_data["Network Condition"] == mode_label)
-        ]["Runtime (ms)"].values[0]
+        df[(df["Certificate"] == cert) & (df["Network Condition"] == mode_label)][
+            "Runtime (ms)"
+        ].values[0]
         for cert in certificates
     ]
-    ax.bar(
-        x + (i - len(modes) / 2 + 0.5) * width,
+    offset = width * multiplier
+    rects = plt.bar(
+        x + offset,
         runtimes,
         width,
         label=mode_label,
-        color=colors[i],
+        color=colors[multiplier],
         edgecolor="black",
-        linewidth=0.5,
+        linewidth=1,
     )
+    multiplier += 1
 
-ax.set_facecolor("#F0F0F0")
-ax.set_xticks(x)
-ax.set_xticklabels(certificates, rotation=45, ha="right", fontsize=14)
-ax.set_xlabel("Certificate", fontsize=16, fontweight="bold")
-ax.set_ylabel("Average Runtime (ms)", fontsize=16, fontweight="bold")
-ax.yaxis.grid(True, linestyle="--", alpha=0.7, color="white")
-ax.set_title(
-    f"Runtime Analysis: Network Condition Comparison using {kem}",
-    fontsize=20,
-    fontweight="bold",
-    pad=20,
+# Customize the plot
+plt.xlabel("Certificate", fontsize=24, fontweight="bold")
+plt.ylabel("Average Runtime (ms)", fontsize=24, fontweight="bold")
+plt.xticks(x + width * 1.5, certificates, rotation=45, ha="right", fontsize=20)
+plt.yticks(fontsize=20)
+
+# Increase legend font size and move it outside the plot
+plt.legend(
+    title="Network Condition",
+    title_fontsize=28,
+    fontsize=24,
 )
-
-# Increase legend font size
-ax.legend(title="Network Condition", title_fontsize="16", loc=2, prop={"size": 14})
-
-for i, mode_key in enumerate(modes.keys()):
-    for j, cert in enumerate(certificates):
-        v = kem_data[
-            (kem_data["Certificate"] == cert)
-            & (kem_data["Network Condition"] == modes[mode_key])
-        ]["Runtime (ms)"].values[0]
-        ax.text(
-            j + (i - len(modes) / 2 + 0.5) * width,
-            v,
-            f"{v:.1f}",
-            ha="center",
-            va="bottom",
-            fontsize=10,
-            rotation=90,
-            color="black",
-        )
-
-# Increase font size for tick labels
-ax.tick_params(axis="both", which="major", labelsize=14)
-
+plt.grid(True, axis="y", linestyle="--", alpha=0.7)
 plt.tight_layout()
 
 # Save the plot as a PNG file
 output_path = os.path.join(
-    os.getenv("HOST_DATA_PATH"), "x25519_runtime_analysis_plot.png"
+    os.getenv("HOST_DATA_PATH"), "x25519_certificate_network_comparison_plot.png"
 )
 plt.savefig(output_path, dpi=300, bbox_inches="tight")
 print(f"Plot saved as {output_path}")
 
 # Close the plot to free up memory
-plt.close(fig)
+plt.close()
