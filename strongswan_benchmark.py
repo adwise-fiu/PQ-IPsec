@@ -9,26 +9,26 @@ from dotenv import load_dotenv
 load_dotenv()
 
 certificates = [
-    "ecdsa",
-    "ed25519",
-    "rsa",
-    "falcon512",
+    # "ecdsa",
+    # "ed25519",
+    # "rsa",
+    # "falcon512",
     "falcon1024",
-    "dilithium2",
-    "dilithium3",
-    "dilithium5",
+    # "dilithium2",
+    # "dilithium3",
+    # "dilithium5",
 ]
 base_proposal = "aes256-sha256"
 kem_proposals = [
     "x25519",
-    "ke1_kyber1-x25519",
-    "ke1_kyber3-x25519",
-    "ke1_kyber5-x25519",
-    "ke1_kyber3-ke2_bike3-ke3_hqc3-x25519",
+    # "ke1_kyber1-x25519",
+    # "ke1_kyber3-x25519",
+    # "ke1_kyber5-x25519",
+    # "ke1_kyber3-ke2_bike3-ke3_hqc3-x25519",
 ]
-mode = "0ping5pl"
+mode = "test"
 log_names = []
-iterations = str(10)
+iterations = str(1)
 
 carol_conf_path = os.getenv("CAROL_CONF_PATH")
 moon_conf_path = os.getenv("MOON_CONF_PATH")
