@@ -23,3 +23,4 @@ Graphing: matplotlib
 ## Authors
 
 Ahmet Mutlugun [Github](https://github.com/ahmetmutlugun)
+Yacoub Hanna [Github](https://github.com/yacoubhanna)
