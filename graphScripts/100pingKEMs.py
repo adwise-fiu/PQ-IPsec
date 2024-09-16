@@ -87,7 +87,7 @@ data = [
 df = pd.DataFrame(data)
 
 # Create visualization
-plt.figure(figsize=(18, 12))  # Increased figure size
+plt.figure(figsize=(20, 14))  # Increased figure size
 plt.style.use("default")
 
 # Set up the bar plot
@@ -95,8 +95,8 @@ x = np.arange(len(kem_labels))
 width = 0.2
 multiplier = 0
 
-# Define a vibrant color palette
-colors = ["#58508d", "#bc5090", "#ff6361", "#ffa600"]
+# Define different hatch patterns for each network condition
+hatches = ["/", "\\", "x", "."]
 
 # Plot bars for each network condition
 for mode_key, mode_label in modes.items():
@@ -108,32 +108,50 @@ for mode_key, mode_label in modes.items():
     ]
     offset = width * multiplier
     rects = plt.bar(
-        x + offset, runtimes, width, label=mode_label, color=colors[multiplier]
+        x + offset,
+        runtimes,
+        width,
+        label=mode_label,
+        color="white",
+        edgecolor="black",
+        hatch=hatches[multiplier],
+        linewidth=3,
     )
-    plt.bar_label(rects, padding=3, rotation=90, fontsize=10)  # Increased font size
+    # for rect in rects:
+    #     height = rect.get_height()
+    #     plt.text(
+    #         rect.get_x() + rect.get_width() / 2.0,
+    #         height,
+    #         f"{height:.2f}",
+    #         ha="center",
+    #         va="bottom",
+    #         fontsize=10,
+    #         rotation=90,
+    #     )
     multiplier += 1
 
 # Customize the plot
-plt.xlabel("Key Encapsulation Mechanism (KEM)", fontsize=14, fontweight="bold")
-plt.ylabel("Average Runtime (ms)", fontsize=14, fontweight="bold")
-plt.title(
-    "RSA Performance with Various KEMs and Network Conditions - 100 Propagation Delay",
-    fontsize=18,
-    fontweight="bold",
-)
-plt.xticks(
-    x + width * 1.5, kem_labels, rotation=45, ha="right", fontsize=12
-)  # Increased font size
-plt.yticks(fontsize=12)  # Increased font size
+plt.xlabel("Key Encapsulation Mechanism (KEM)", fontsize=32, fontweight="bold")
+plt.ylabel("Average Runtime (ms)", fontsize=32, fontweight="bold")
+plt.xticks(x + width * 1.5, kem_labels, rotation=45, ha="right", fontsize=28)
+plt.yticks(fontsize=28)
 
-# Increase legend font size
-plt.legend(title="Network Condition", title_fontsize=14, fontsize=16, loc="upper left")
+# Increase legend font size and move it outside the plot
+plt.legend(
+    title="Network Condition",
+    title_fontsize=32,
+    fontsize=28,
+)
 plt.grid(True, axis="y", linestyle="--", alpha=0.7)
 plt.tight_layout()
 
+# Make the plot border thicker
+for spine in plt.gca().spines.values():
+    spine.set_linewidth(3)
+
 # Save the plot as a PNG file
 output_path = os.path.join(
-    os.getenv("HOST_DATA_PATH"), "rsa_kem_network_comparison_plot.png"
+    os.getenv("HOST_DATA_PATH"), "rsa_kem_network_comparison_plot_bw.png"
 )
 plt.savefig(output_path, dpi=300, bbox_inches="tight")
 print(f"Plot saved as {output_path}")

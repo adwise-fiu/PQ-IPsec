@@ -13,22 +13,22 @@ certificates = [
     # "ed25519",
     # "rsa",
     # "falcon512",
-    "falcon1024",
-    # "dilithium2",
+    # "falcon1024",
+    "dilithium2",
     # "dilithium3",
     # "dilithium5",
 ]
 base_proposal = "aes256-sha256"
 kem_proposals = [
     "x25519",
-    # "ke1_kyber1-x25519",
-    # "ke1_kyber3-x25519",
-    # "ke1_kyber5-x25519",
-    # "ke1_kyber3-ke2_bike3-ke3_hqc3-x25519",
+    "ke1_kyber1-x25519",
+    "ke1_kyber3-x25519",
+    "ke1_kyber5-x25519",
+    "ke1_kyber3-ke2_bike3-ke3_hqc3-x25519",
 ]
-mode = "test"
+mode = "200ping0pl"
 log_names = []
-iterations = str(1)
+iterations = str(500)
 
 carol_conf_path = os.getenv("CAROL_CONF_PATH")
 moon_conf_path = os.getenv("MOON_CONF_PATH")

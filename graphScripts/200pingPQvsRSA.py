@@ -15,10 +15,10 @@ combinations = [
     ("falcon1024", "ke1_kyber3-x25519", "Dilithium 2 + Kyber1"),
 ]
 modes = {
-    "100ping": "0% Packet Loss",
-    "100ping05pl": "1% Packet Loss",
-    "100ping1pl": "2% Packet Loss",
-    "100ping25pl": "5% Packet Loss",
+    "200ping0pl": "0% Packet Loss",
+    "200ping05pl": "1% Packet Loss",
+    "200ping1pl": "2% Packet Loss",
+    # "200ping25pl": "5% Packet Loss",
 }
 
 # Check for vmrun

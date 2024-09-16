@@ -11,22 +11,20 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Define constants
-certificates = [
-    "ed25519",
-    "ecdsa",
-    "rsa",
-    "falcon512",
-    "falcon1024",
-    "dilithium2",
-    "dilithium3",
-    "dilithium5",
+certificates = ["rsa"]  # Only RSA
+kem_proposals = [
+    "x25519",
+    "ke1_kyber1-x25519",
+    "ke1_kyber3-x25519",
+    "ke1_kyber5-x25519",
+    "ke1_kyber3-ke2_bike3-ke3_hqc3-x25519",
 ]
-kem_proposals = ["x25519"]  # Only x25519
+kem_labels = ["x25519", "Kyber1", "Kyber3", "Kyber5", "Kyber3+Bike+Hqc"]
 modes = {
-    "100ping": "0% Packet Loss",
-    "100ping05pl": "1% Packet Loss",
-    "100ping1pl": "2% Packet Loss",
-    "100ping25pl": "5% Packet Loss",
+    "200ping0pl": "0% Packet Loss",
+    "200ping05pl": "1% Packet Loss",
+    "200ping1pl": "2% Packet Loss",
+    # "200ping25pl": "5% Packet Loss",
 }
 
 # Check for vmrun
@@ -78,6 +76,7 @@ data = [
     {
         "Certificate": cert,
         "KEM": kem,
+        "KEM Label": kem_labels[kem_proposals.index(kem)],
         "Network Condition": modes[mode_key],
         "Runtime (ms)": results[(cert, kem, mode_key)],
     }
@@ -92,7 +91,7 @@ plt.figure(figsize=(20, 14))  # Increased figure size
 plt.style.use("default")
 
 # Set up the bar plot
-x = np.arange(len(certificates))
+x = np.arange(len(kem_labels))
 width = 0.2
 multiplier = 0
 
@@ -102,10 +101,10 @@ hatches = ["/", "\\", "x", "."]
 # Plot bars for each network condition
 for mode_key, mode_label in modes.items():
     runtimes = [
-        df[(df["Certificate"] == cert) & (df["Network Condition"] == mode_label)][
+        df[(df["KEM Label"] == kem) & (df["Network Condition"] == mode_label)][
             "Runtime (ms)"
         ].values[0]
-        for cert in certificates
+        for kem in kem_labels
     ]
     offset = width * multiplier
     rects = plt.bar(
@@ -118,12 +117,23 @@ for mode_key, mode_label in modes.items():
         hatch=hatches[multiplier],
         linewidth=3,
     )
+    # for rect in rects:
+    #     height = rect.get_height()
+    #     plt.text(
+    #         rect.get_x() + rect.get_width() / 2.0,
+    #         height,
+    #         f"{height:.2f}",
+    #         ha="center",
+    #         va="bottom",
+    #         fontsize=10,
+    #         rotation=90,
+    #     )
     multiplier += 1
 
 # Customize the plot
-plt.xlabel("Certificate", fontsize=32, fontweight="bold")
+plt.xlabel("Key Encapsulation Mechanism (KEM)", fontsize=32, fontweight="bold")
 plt.ylabel("Average Runtime (ms)", fontsize=32, fontweight="bold")
-plt.xticks(x + width * 1.5, certificates, rotation=45, ha="right", fontsize=28)
+plt.xticks(x + width * 1.5, kem_labels, rotation=45, ha="right", fontsize=28)
 plt.yticks(fontsize=28)
 
 # Increase legend font size and move it outside the plot
@@ -132,7 +142,6 @@ plt.legend(
     title_fontsize=32,
     fontsize=28,
 )
-
 plt.grid(True, axis="y", linestyle="--", alpha=0.7)
 plt.tight_layout()
 
@@ -142,7 +151,7 @@ for spine in plt.gca().spines.values():
 
 # Save the plot as a PNG file
 output_path = os.path.join(
-    os.getenv("HOST_DATA_PATH"), "x25519_certificate_network_comparison_plot_bw.png"
+    os.getenv("HOST_DATA_PATH"), "rsa_kem_network_comparison_plot_bw.png"
 )
 plt.savefig(output_path, dpi=300, bbox_inches="tight")
 print(f"Plot saved as {output_path}")

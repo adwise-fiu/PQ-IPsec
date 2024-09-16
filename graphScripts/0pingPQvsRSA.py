@@ -64,19 +64,19 @@ for cert, kem, label in combinations:
             )
         else:
             print(f"Warning: No data for {label} in {mode_label} condition")
-
 df = pd.DataFrame(data)
 
 # Create visualization
-plt.figure(figsize=(14, 10))  # Increased figure size
+# Create visualization
+plt.figure(figsize=(20, 14))  # Increased figure size
 plt.style.use("default")
 
 # Set up the bar plot
 x = np.arange(len(modes))
 width = 0.35
 
-# Define colors for each combination
-colors = ["#58508d", "#ff6361"]
+# Define hatches for each combination
+hatches = ["/", "\\"]
 
 # Plot bars for each combination
 for i, (_, _, label) in enumerate(combinations):
@@ -89,36 +89,43 @@ for i, (_, _, label) in enumerate(combinations):
             runtimes.append(runtime_data.values[0])
         else:
             runtimes.append(0)  # or np.nan if you prefer
-
     offset = width * (i - 0.5)
-    rects = plt.bar(x + offset, runtimes, width, label=label, color=colors[i])
-    plt.bar_label(rects, padding=3, rotation=90, fontsize=10, fmt="%.2f")
+    rects = plt.bar(
+        x + offset,
+        runtimes,
+        width,
+        label=label,
+        color="white",
+        edgecolor="black",
+        hatch=hatches[i],
+        linewidth=3,
+    )
+    # Removed the bar_label call to remove number labels on top of bars
 
 # Customize the plot
-plt.xlabel("Network Condition", fontsize=14, fontweight="bold")
-plt.ylabel("Average Runtime (ms)", fontsize=14, fontweight="bold")
-plt.title(
-    "Performance Comparison: RSA + x25519 vs Falcon 1024 + Kyber5",
-    fontsize=18,
-    fontweight="bold",
-)
-plt.xticks(x, modes.values(), rotation=45, ha="right", fontsize=12)
+plt.xlabel("Network Condition", fontsize=32, fontweight="bold")
+plt.ylabel("Average Runtime (ms)", fontsize=32, fontweight="bold")
+# Removed the title
+plt.xticks(x, modes.values(), rotation=45, ha="right", fontsize=28)
+plt.yticks(fontsize=28)
 
-# Create a larger legend
+# Increase legend font size and move it outside the plot
 plt.legend(
     title="Combination",
-    title_fontsize=14,
-    fontsize=12,
-    loc="upper left",
-    bbox_to_anchor=(1, 1),
+    title_fontsize=32,
+    fontsize=28,
 )
 
 plt.grid(True, axis="y", linestyle="--", alpha=0.7)
 plt.tight_layout()
 
+# Make the plot border thicker
+for spine in plt.gca().spines.values():
+    spine.set_linewidth(3)
+
 # Save the plot as a PNG file
 output_path = os.path.join(
-    os.getenv("HOST_DATA_PATH"), "rsa_x25519_vs_falcon1024_kyber5_comparison.png"
+    os.getenv("HOST_DATA_PATH"), "rsa_x25519_vs_falcon1024_kyber5_comparison_bw.png"
 )
 plt.savefig(output_path, dpi=300, bbox_inches="tight")
 print(f"Plot saved as {output_path}")

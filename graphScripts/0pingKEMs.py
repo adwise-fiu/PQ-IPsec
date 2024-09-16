@@ -77,8 +77,8 @@ x = np.arange(len(kem_labels))
 width = 0.2
 multiplier = 0
 
-# Define a vibrant color palette
-colors = ["#58508d", "#bc5090", "#ff6361", "#ffa600"]
+# Define different hatch patterns for each network condition
+hatches = ["/", "\\", "x", "."]
 
 # Plot bars for each network condition
 for mode_key, mode_label in modes.items():
@@ -94,31 +94,47 @@ for mode_key, mode_label in modes.items():
         runtimes,
         width,
         label=mode_label,
-        color=colors[multiplier],
+        color="white",
         edgecolor="black",
-        linewidth=1,
+        hatch=hatches[multiplier],
+        linewidth=3,
     )
+    for rect in rects:
+        height = rect.get_height()
+        plt.text(
+            rect.get_x() + rect.get_width() / 2.0,
+            height,
+            f"{height:.2f}",
+            ha="center",
+            va="bottom",
+            fontsize=10,
+            rotation=90,
+        )
     multiplier += 1
 
 # Customize the plot
-plt.xlabel("Key Encapsulation Mechanism (KEM)", fontsize=24, fontweight="bold")
-plt.ylabel("Average Runtime (ms)", fontsize=24, fontweight="bold")
-plt.xticks(x + width * 1.5, kem_labels, rotation=45, ha="right", fontsize=20)
-plt.yticks(fontsize=20)
+plt.xlabel("Key Encapsulation Mechanism (KEM)", fontsize=32, fontweight="bold")
+plt.ylabel("Average Runtime (ms)", fontsize=32, fontweight="bold")
+plt.xticks(x + width * 1.5, kem_labels, rotation=45, ha="right", fontsize=28)
+plt.yticks(fontsize=28)
 
 # Increase legend font size and move it outside the plot
 plt.legend(
     title="Network Condition",
-    title_fontsize=28,
-    fontsize=24,
+    title_fontsize=32,
+    fontsize=28,
 )
 
 plt.grid(True, axis="y", linestyle="--", alpha=0.7)
 plt.tight_layout()
 
+# Make the plot border thicker
+for spine in plt.gca().spines.values():
+    spine.set_linewidth(3)
+
 # Save the plot as a PNG file
 output_path = os.path.join(
-    os.getenv("HOST_DATA_PATH"), "rsa_kem_network_comparison_plot.png"
+    os.getenv("HOST_DATA_PATH"), "rsa_kem_network_comparison_plot_bw.png"
 )
 plt.savefig(output_path, dpi=300, bbox_inches="tight")
 print(f"Plot saved as {output_path}")
